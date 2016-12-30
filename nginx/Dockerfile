@@ -2,14 +2,30 @@
 # nginx
 #
 # build:
-#   docker build --force-rm=true -t draconids/nginx:latest .
+#   docker build --force-rm=true -t draconids/nginx:1.10.2 .
 #
-# bash:
-#   docker run -it --rm draconids/certbot:latest auth --authenticator webroot --webroot-path /var/www --renew-by-default --agree-tos --email draconids@nate.com --server https://acme-v01.api.letsencrypt.org/directory -d dev.pamm.co.kr
 
 FROM draconids/ubuntu:latest
 
 MAINTAINER Choi Iris <draconids@nate.com>
 
 ENV NGINX_VERSION 1.10.2
-ENV NGX_PAGESPEED_VERSION 1.11.33.4
+
+RUN apt-get -y install build-essential zlib1g-dev libpcre3 libpcre3-dev unzip curl wget
+
+RUN ["/bin/bash", "-c", "bash <(curl -f -L -sS https://ngxpagespeed.com/install) --nginx-version ${NGINX_VERSION}"]
+
+ADD ./nginx.conf /usr/local/nginx/conf/nginx.conf
+ADD ./proxy_params /usr/local/nginx/conf/proxy_params
+
+# volume
+VOLUME /usr/local/nginx/conf/certs
+VOLUME /usr/local/nginx/conf/conf.d
+VOLUME /usr/local/nginx/conf/sites
+VOLUME /usr/local/nginx/conf/streams
+
+WORKDIR /usr/local/nginx
+
+EXPOSE 80 443
+
+CMD /usr/local/sbin/nginx
