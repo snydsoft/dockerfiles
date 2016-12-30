@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-FROM draconids/ubuntu:latest
-=======
 #
 # nginx
 #
@@ -9,8 +6,6 @@ FROM draconids/ubuntu:latest
 #
 # bash:
 #   docker run -it --rm draconids/certbot:latest auth --authenticator webroot --webroot-path /var/www --renew-by-default --agree-tos --email draconids@nate.com --server https://acme-v01.api.letsencrypt.org/directory -d dev.pamm.co.kr
->>>>>>> feature/nginx
-
 
 FROM draconids/ubuntu:latest
 
